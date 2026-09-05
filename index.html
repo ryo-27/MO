@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Portal</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2f3d;
+      --text: #e8eaed;
+      --muted: #8b93a7;
+      --accent: #6c9eff;
+      --accent-hover: #8ab4ff;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    header {
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      margin-top: 0.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .card {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .card:hover .card-title {
+      color: var(--accent-hover);
+    }
+
+    .card-desc {
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    .card-meta {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: ui-monospace, "Cascadia Code", monospace;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+    }
+
+    .empty code {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      background: var(--surface);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Portal</h1>
+      <p>まとめて公開するポータル</p>
+    </header>
+
+    <div id="portal" class="grid"></div>
+
+    <footer></footer>
+  </div>
+
+  <script>
+    // ========================================
+    // ページを追加するときはここに追記するだけ
+    // file: プロジェクト直下の HTML ファイル名
+    // title: 表示名
+    // description: 説明（省略可）
+    // date: 作成日 YYYY-MM-DD（省略可）
+    // ========================================
+    const PAGES = [
+      // { file: "example.html", title: "サンプルページ", description: "動作確認用", date: "2026-09-05" },
+      { file: "CJM.html", title: "新規趣味配送サブスク CJM", description: "カスタマージャーニーマップ。ターゲットの「ライフステージ（年代）」と「求める趣味の性質（ジャンル）」の2軸でセグメンテーションを行う。", date: "2026-09-05" },
+    ];
+
+    const portal = document.getElementById("portal");
+
+    if (PAGES.length === 0) {
+      portal.innerHTML = `
+        <div class="empty">
+          まだページが登録されていません<br>
+          <code>index.html</code> 内の <code>PAGES</code> 配列に追加してください
+        </div>`;
+    } else {
+      portal.innerHTML = PAGES.map(({ file, title, description, date }) => `
+        <a class="card" href="${file}">
+          <div class="card-title">${title}</div>
+          ${description ? `<div class="card-desc">${description}</div>` : ""}
+          <div class="card-meta">${file}${date ? ` · ${date}` : ""}</div>
+        </a>
+      `).join("");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カスタマージャーニーマップ (全セグメント)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: #f8fafc;
+        }
+        .cjm-card {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media print {
+            body { background-color: white; }
+            .break-inside-avoid { page-break-inside: avoid; break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-8 text-center md:text-left">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">新規趣味配送サブスク CJM</h1>
+            <p class="text-slate-600 max-w-3xl leading-relaxed">
+                新しい趣味に出会うハードルを下げるための「趣味配送サブスクサービス」におけるカスタマージャーニーマップ。<br>
+                ターゲットの「ライフステージ（年代）」と「求める趣味の性質（ジャンル）」の2軸でセグメンテーションを行っています。<br>
+                <span class="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium mt-3 inline-block">全9セグメント 一覧表示</span>
+            </p>
+        </header>
+
+        <div id="cjm-container" class="space-y-8 md:space-y-12">
+            <!-- コンテンツはJavaScriptで動的に全件生成されます -->
+        </div>
+    </div>
+
+    <script>
+        const cjmData = {
+            young: {
+                indoor: [
+                    { phase: "欲求発生", t: "TikTokやInstagramで「レジンアクセサリー作り」のショート動画を見て「自分もやってみたい」と思う。", p: "興味を持っても、具体的に何を揃えればいいか分からない。", s: "事前診断による興味関心の抽出と、アルゴリズムによる最適な「制作キット」のランダム配送。" },
+                    { phase: "情報収集", t: "Amazonや100円ショップで材料を検索し、カートに一式を入れてみる。", p: "総額が高くなり、専用工具なども必要なため「本当に続けるか分からないのに初期投資が痛い」と感じる。", s: "必要な分量の材料と基本工具のみが入ったオールインワンキットの提供。" },
+                    { phase: "比較検討", t: "「飽きたらゴミになるし、お金の無駄かも」と考え、結局カートから削除してスマホを閉じる。", p: "飽きた時のサンクコスト（埋没費用）に対する極度の警戒感。", s: "返品＆キャッシュバック保証。合わなければ箱に戻して返送し、金銭的リスクを排除。" },
+                    { phase: "決断・実行", t: "何も始めず、今まで通りYouTubeやSNSをダラダラと消費して休日が終わる。", p: "行動を後押しする強制力がなく、新しいインプットが得られない。", s: "隔月で強制的に届くサブスクモデル。SNSでのシェアを促す映える動画コンテンツを同梱。" }
+                ],
+                outdoor: [
+                    { phase: "欲求発生", t: "週末、友人と「どこか遊びに行こう」となるが、いつも同じカフェやカラオケばかりでマンネリを感じている。", p: "新しい体験を探すのは面倒で、友人の趣味嗜好に合うかも分からない。", s: "友人や恋人とそのまま使えるペアチケットの定期配送。" },
+                    { phase: "情報収集", t: "レジャー予約サイトを見るが、SUPやパラグライダーなどは単価が高く、場所も遠い。", p: "若年層にとって移動手段（車）の制約や、1回数千円〜1万円の出費は重い。", s: "予算内（サブスク月額内）で完結し、アクセスも考慮された近隣の体験施設チケットの提供。" },
+                    { phase: "比較検討", t: "「サウナなら行けるかも」と思うが、初心者がいきなり本格的な施設に行くのはハードルが高い。", p: "未知のコミュニティや施設に飛び込む心理的抵抗感と知識不足。", s: "施設の楽しみ方やマナーを事前に学べる解説動画コンテンツの配信。" },
+                    { phase: "決断・実行", t: "結局「また今度でいいや」となり、いつものファミレスに落ち着く。", p: "「言い出しっぺ」になることへの負担感。", s: "「チケットが届いたから行こう」という、友人を誘うための大義名分（口コミ・シェアの起爆剤）の提供。" }
+                ],
+                culture: [
+                    { phase: "欲求発生", t: "「もっと大人っぽい趣味を持ちたい」「教養を身につけたい」と漠然と考える。", p: "カルチャー系（クラシック音楽、美術館巡り、スペシャルティコーヒー等）は敷居が高く感じる。", s: "スマホで完結するカジュアルな趣味診断から、潜在的なカルチャー適性を提示。" },
+                    { phase: "情報収集", t: "ネットで「コーヒー 始め方」と調べるが、専門用語（焙煎度、産地、抽出器具）が多くて挫折する。", p: "情報がプロ向け・オタク向けすぎて、初心者のエントリーポイントがない。", s: "専門用語を省き、エンタメ化したポップな動画コンテンツと、少量のテイスティングキットの配送。" },
+                    { phase: "比較検討", t: "サブスクのコーヒー豆や映画配信サービスを検討するが、「毎月消費しきれない」と懸念する。", p: "定額制による「ノルマ感」への嫌悪。", s: "隔月配送による、プレッシャーを感じさせないゆったりとしたペース設計。" },
+                    { phase: "決断・実行", t: "結局スマホゲームなど、受動的で消化しやすいコンテンツに戻ってしまう。", p: "高尚なものを楽しむための「最初の成功体験」が不足している。", s: "「届いたものを動画を見ながら試すだけ」という極限まで下げたハードルによる小さな成功体験の提供。" }
+                ]
+            },
+            middle: {
+                indoor: [
+                    { phase: "欲求発生", t: "仕事や家事のストレスから解放されるため、夜の数時間で無心になれる作業（編み物、プラモデル等）を求める。", p: "疲労が蓄積しており、ゼロから新しい趣味を考える思考のリソースが残っていない。", s: "思考ゼロで完結する、診断に基づくサプライズ・ランダム配送。" },
+                    { phase: "情報収集", t: "週末に手芸店や家電量販店に行こうと思うが、平日の疲れで結局休日は家で寝てしまう。", p: "買い出しという「物理的な移動」と「選ぶ労力」が最大のブロッカー。", s: "自宅のポストまたは宅配ボックスに自動的に届く物理的な配送サービス。" },
+                    { phase: "比較検討", t: "ネット通販で買おうとするが、複数のショップを比較するのが面倒になる。", p: "選択回避の法則（選択肢が多すぎて選べない）に陥っている。", s: "我々が厳選した「間違いない品質のキット」を1つだけ届けるキュレーション機能。" },
+                    { phase: "決断・実行", t: "「落ち着いたらやろう」と先延ばしにし、そのまま数ヶ月が経過する。", p: "始めるための強制的なトリガーが存在しない。", s: "隔月という適度なリズムで「自分へのご褒美」が強制的に届く体験の創出。" }
+                ],
+                outdoor: [
+                    { phase: "欲求発生", t: "週末は家族やパートナーと過ごすことが多いが、「毎週行く場所が同じ（ショッピングモール等）」という課題感がある。", p: "家族・パートナー全員が楽しめる新しい外出先を企画する負担（企画疲れ）。", s: "ペアチケット（またはファミリー対応の体験券）の定期配送による、休日の行き先提案。" },
+                    { phase: "情報収集", t: "妻/夫に「今週末どこ行く？」と聞かれ、スマホで慌てて近場のイベントや施設を検索する。", p: "毎回ゼロベースで検索・予約をしなければならない。", s: "事前診断に「一緒に行く人」の属性を入れておくことで、同伴者も楽しめる体験を自動マッチング。" },
+                    { phase: "比較検討", t: "「陶芸教室」を見つけるが、予約フォームの入力やスケジュールの調整が手間で後回しにする。", p: "予約という摩擦（フリクション）が大きい。", s: "面倒な事前予約が不要、または専用アプリから1タップで日程確定できるシームレスな導線の提供。" },
+                    { phase: "決断・実行", t: "結局、確実で面倒がないいつもの公園やモールで休日を消費する。", p: "「新しい体験によるリフレッシュ」より「慣れた行動の安心感・楽さ」が勝つ。", s: "チケットが物理的に届くことでサンクコスト効果を生み、「もったいないから行こう」と重い腰を上げさせる。" }
+                ],
+                culture: [
+                    { phase: "欲求発生", t: "キャリアの停滞感や日々の単調さから、美術館、観劇、または質の高い読書などでインスピレーションを得たいと感じる。", p: "体系的に学ぶ時間的余裕がなく、表面的な知識にとどまる。", s: "コンテンツの背景や歴史、見どころを短時間で学べる高品質な解説動画の同梱。" },
+                    { phase: "情報収集", t: "話題の展覧会や演劇の情報をニュースアプリで見つける。", p: "人気の展示は混雑しており、チケットの事前確保が難しい・面倒。", s: "マイナーだが質が高い、あるいは予約が取りやすい穴場的なカルチャー体験チケットの提供。" },
+                    { phase: "比較検討", t: "「休日の貴重な数時間を費やして、面白くなかったら嫌だな」とタイパ（タイムパフォーマンス）を気にする。", p: "ハズレを引いて自分の貴重な可処分時間を無駄にするリスクへの恐怖。", s: "ユーザーの口コミや過去の診断データに基づいた、高精度なパーソナライズマッチングによるハズレの回避。" },
+                    { phase: "決断・実行", t: "結局Netflixなど、いつでもやめられる自宅の映像コンテンツを倍速で見る。", p: "「出向く」というコミットメントが重すぎる。", s: "万が一チケットを使えなかった場合でも、別ジャンルの体験やキットにポイントを振り替え・キャッシュバックできる柔軟な制度。" }
+                ]
+            },
+            senior: {
+                indoor: [
+                    { phase: "欲求発生", t: "定年退職や子どもの独立を機に、ボケ防止や時間潰しのために何か手作業（水彩画、盆栽、陶芸など）を始めたいと考える。", p: "自分に何が向いているか、体力的・視力的に無理がないか分からない。", s: "スマホやPCから簡単にできる、身体的負担も考慮したシニア向け趣味診断の実装。" },
+                    { phase: "情報収集", t: "書店で趣味の雑誌を買ったり、カルチャーセンターのパンフレットを取り寄せたりする。", p: "道具を一式揃えると場所を取る。終活を意識する年代にとって「モノが増える」ことは大きなストレス。", s: "必要な分だけ届き、完成品や不要になった道具を返送できる（キャッシュバック付き）エコシステム。" },
+                    { phase: "比較検討", t: "「老眼で細かい作業は厳しいかも」「途中で挫折したらみっともない」と自己効力感が低下している。", p: "加齢に伴う身体的変化による、新しいことへの自信喪失。", s: "シニアでも見やすい大きな文字のガイドブックや、つまずきやすいポイントを丁寧に解説する動画の提供。" },
+                    { phase: "決断・実行", t: "結局テレビを見たり、庭の手入れなど、すでに知っている作業のみを繰り返す。", p: "失敗した時のモノの処理と精神的ダメージが怖い。", s: "「返品可能だから、合わなければ返せばいい」という心理的安全性の担保。" }
+                ],
+                outdoor: [
+                    { phase: "欲求発生", t: "健康維持のために外に出たい、夫婦で共通の話題を作るために一緒に出かけたいと考える。", p: "激しい運動は難しく、また「夫婦で行って楽しめるか」という不安がある。", s: "夫婦・友人で参加できる、ウォーキングや軽ハイキング、果物狩りなどのシニア向けペアチケットの配送。" },
+                    { phase: "情報収集", t: "自治体の広報誌や、旅行会社のシニア向け日帰りバスツアーのチラシを見る。", p: "バスツアーは集団行動で気疲れするし、自分で計画するのは億劫。", s: "個人単位で自由に動けつつ、行程はパッケージ化されている半日完結型の体験プランの提供。" },
+                    { phase: "比較検討", t: "行き先を決めようとすると、交通アクセスや駐車場の有無、トイレの綺麗さなどが気になり調べるのが面倒。", p: "現地のインフラやサポート体制に対する情報不足・不安。", s: "駐車場情報やアクセス、バリアフリー状況などが完全に網羅された詳細な事前案内の同封。" },
+                    { phase: "決断・実行", t: "夫婦で意見が合わず、結局近所のスーパーへの買い出しで外出を済ませる。", p: "「どちらかが企画・提案する」というプロセスで生じる摩擦。", s: "「サービス側から提案されたから行く」という外部要因化による、夫婦間の摩擦ゼロ化。" }
+                ],
+                culture: [
+                    { phase: "欲求発生", t: "時間的余裕があるため、歴史探訪、伝統芸能の鑑賞、あるいは地域のコミュニティ活動に興味を持つ。", p: "一人で参加して孤立しないか、常連の輪に入れるかという対人不安。", s: "ペアチケットによる同伴者との参加保証、または個人参加でも孤立しない鑑賞系コンテンツのキュレーション。" },
+                    { phase: "情報収集", t: "新聞広告や地域の掲示板で催し物を見つける。", p: "申し込みがWeb限定だったり、会員登録が必要だったりと、デジタルリテラシーの壁に当たる。", s: "初回にアカウントを作れば、あとは毎月自動でチケットが郵送される物理ベースのUX。" },
+                    { phase: "比較検討", t: "「自分の趣味に合うジャンル（例えば歌舞伎より落語がいい等）」が限られており、新しいジャンルに手を出しづらい。", p: "過去の経験に固執し、未知のジャンルを無意識に排除してしまう。", s: "診断ベースで「少しだけ自分の枠を出る」程度の、受容可能な範囲のランダム性（セレンディピティ）の提供。" },
+                    { phase: "決断・実行", t: "結局、昔から好きな作家の単行本を買って家で読むだけにとどまる。", p: "外部からの心地よい刺激・サプライズが不足している。", s: "箱を開けるまで何が入っているか分からない「おとなの福袋」的なワクワク感と、それを補足する丁寧な解説動画による知的好奇心の刺激。" }
+                ]
+            }
+        };
+
+        const labels = {
+            age: { young: "若年層 (10〜20代)", middle: "中間層 (30〜40代)", senior: "シニア層 (50代〜)" },
+            genre: { indoor: "インドア・制作系", outdoor: "アウトドア・体験系", culture: "カルチャー・鑑賞系" }
+        };
+
+        const orderAge = ['young', 'middle', 'senior'];
+        const orderGenre = ['indoor', 'outdoor', 'culture'];
+
+        function renderAllCJM() {
+            const container = document.getElementById('cjm-container');
+            let html = '';
+
+            orderAge.forEach(ageKey => {
+                orderGenre.forEach(genreKey => {
+                    const data = cjmData[ageKey][genreKey];
+                    const title = `${labels.age[ageKey]} × ${labels.genre[genreKey]}`;
+                    
+                    html += `
+                        <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden break-inside-avoid">
+                            <div class="bg-slate-50 border-b border-slate-200 p-4 md:px-6">
+                                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                                    ${title}
+                                </h3>
+                            </div>
+                            <div class="p-4 md:p-6">
+                                <!-- PC用ヘッダー行 -->
+                                <div class="hidden md:grid grid-cols-12 gap-4 bg-slate-100 p-3 rounded-lg font-bold text-slate-600 mb-4 text-sm border border-slate-200">
+                                    <div class="col-span-2">フェーズ</div>
+                                    <div class="col-span-3">T (Time: 現在の行動)</div>
+                                    <div class="col-span-3">P (Problem: 課題)</div>
+                                    <div class="col-span-4 text-blue-600">S (Solution: 解決策)</div>
+                                </div>
+                                <div class="space-y-4 md:space-y-0">
+                    `;
+
+                    data.forEach((item, index) => {
+                        const isLast = index === data.length - 1;
+                        html += `
+                            <div class="cjm-card border border-slate-200 md:border-b md:border-x-0 md:border-t-0 md:rounded-none rounded-xl p-4 md:p-3 shadow-sm md:shadow-none hover:bg-slate-50 transition-colors ${!isLast ? '' : 'md:border-b-0'}">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:items-start text-sm">
+                                    <!-- Phase -->
+                                    <div class="col-span-1 md:col-span-2">
+                                        <span class="inline-block md:hidden text-xs font-bold text-slate-400 mb-1">フェーズ</span>
+                                        <div class="font-bold text-slate-800 flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-blue-500 md:hidden"></span>
+                                            ${item.phase}
+                                        </div>
+                                    </div>
+                                    <!-- T -->
+                                    <div class="col-span-1 md:col-span-3">
+                                        <span class="inline-block md:hidden text-xs font-bold text-slate-400 mb-1">T (現在の行動)</span>
+                                        <p class="text-slate-700 leading-relaxed">${item.t}</p>
+                                    </div>
+                                    <!-- P -->
+                                    <div class="col-span-1 md:col-span-3">
+                                        <span class="inline-block md:hidden text-xs font-bold text-slate-400 mb-1">P (課題)</span>
+                                        <div class="bg-red-50 text-red-800 p-3 rounded-lg md:bg-transparent md:p-0 md:text-slate-700">
+                                            <p class="leading-relaxed">${item.p}</p>
+                                        </div>
+                                    </div>
+                                    <!-- S -->
+                                    <div class="col-span-1 md:col-span-4 relative">
+                                        <span class="inline-block md:hidden text-xs font-bold text-blue-500 mb-1">S (我々の解決策)</span>
+                                        <div class="bg-blue-50 p-3 rounded-xl md:rounded-lg border border-blue-200 h-full">
+                                            <p class="text-blue-900 leading-relaxed">${item.s}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+
+            container.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllCJM();
+        });
+    </script>
+</body>
+</html>
