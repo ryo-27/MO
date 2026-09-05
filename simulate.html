@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>週末体験サブスク 採算シミュレーター</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* スクロールバーのカスタマイズ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+        
+        <!-- 左側：入力パネル -->
+        <div class="w-full md:w-5/12 bg-gray-50 p-6 md:p-8 border-r border-gray-200 overflow-y-auto">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">事業シミュレーター</h1>
+            
+            <div class="space-y-6">
+                <!-- 売上要素 -->
+                <div>
+                    <h2 class="text-lg font-semibold border-b pb-2 mb-4 text-blue-700">売上要素</h2>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" title="サブスクの月額料金">月額料金 (円/月)</label>
+                        <input type="number" id="price" value="3500" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <p class="text-xs text-gray-500 mt-1">※隔月7,000円なら月額3,500円</p>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">契約数 (人)</label>
+                        <input type="range" id="users-slider" min="0" max="1000" step="10" value="100" class="w-full">
+                        <div class="flex justify-between mt-1">
+                            <input type="number" id="users" value="100" class="w-24 p-1 border border-gray-300 rounded text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <span class="text-sm text-gray-600 self-end">人</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 変動費要素 -->
+                <div>
+                    <h2 class="text-lg font-semibold border-b pb-2 mb-4 text-red-700">1セットあたりの原価（変動費）</h2>
+                    <p class="text-xs text-gray-500 mb-3">※配送は「隔月」のため、月次の計算ではこの半額が1人あたりの月間コストになります。</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">仕入れ (円)</label>
+                            <input type="number" id="cost-goods" value="2500" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">配達料 (円)</label>
+                            <input type="number" id="cost-shipping" value="1000" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">作業人件費 (円)</label>
+                            <input type="number" id="cost-labor" value="150" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">資材費等 (円)</label>
+                            <input type="number" id="cost-materials" value="150" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">決済手数料 (%)</label>
+                        <input type="number" id="cost-payment-fee" value="3.6" step="0.1" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                        <p class="text-xs text-gray-500 mt-1">※毎月の売上に対して発生します。</p>
+                    </div>
+                </div>
+
+                <!-- 固定費要素 -->
+                <div>
+                    <h2 class="text-lg font-semibold border-b pb-2 mb-4 text-yellow-700">月間の固定費</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">広告費 (円)</label>
+                            <input type="number" id="fixed-ads" value="40000" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">サーバー・SaaS (円)</label>
+                            <input type="number" id="fixed-server" value="5000" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側：結果パネル -->
+        <div class="w-full md:w-7/12 p-6 md:p-10 flex flex-col justify-between">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    月次シミュレーション結果
+                </h2>
+                
+                <div class="space-y-4">
+                    <!-- 売上 -->
+                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
+                        <span class="text-gray-700 font-semibold">月間売上</span>
+                        <span class="text-2xl font-bold text-blue-700" id="res-revenue">¥0</span>
+                    </div>
+
+                    <!-- 原価・固定費 -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-red-50 rounded-lg border border-red-100 flex flex-col justify-center">
+                            <span class="text-sm text-gray-600 font-medium">月間変動費合計</span>
+                            <span class="text-xl font-bold text-red-600" id="res-variable">¥0</span>
+                            <span class="text-xs text-gray-500 mt-1">決済手数料含む</span>
+                        </div>
+                        <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-100 flex flex-col justify-center">
+                            <span class="text-sm text-gray-600 font-medium">月間固定費合計</span>
+                            <span class="text-xl font-bold text-yellow-600" id="res-fixed">¥0</span>
+                        </div>
+                    </div>
+
+                    <!-- 利益 -->
+                    <div class="mt-6 p-6 rounded-xl border-2 shadow-sm transition-colors duration-300" id="profit-box">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-lg font-bold text-gray-800">月間営業利益</span>
+                            <span class="text-4xl font-extrabold" id="res-profit">¥0</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4 overflow-hidden">
+                            <div id="profit-margin-bar" class="bg-green-500 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <div class="flex justify-between mt-1">
+                            <span class="text-xs text-gray-500">利益率</span>
+                            <span class="text-sm font-bold text-gray-700" id="res-margin">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <div class="flex justify-between items-end mb-4">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">年間着地見込み (営業利益)</h3>
+                        <p class="text-3xl font-bold text-gray-900 mt-1" id="res-yearly-profit">¥0</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-500">損益分岐点</p>
+                        <p class="text-lg font-bold text-gray-700">約 <span id="res-breakeven">0</span> 人</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM要素の取得
+        const inputs = {
+            price: document.getElementById('price'),
+            users: document.getElementById('users'),
+            usersSlider: document.getElementById('users-slider'),
+            costGoods: document.getElementById('cost-goods'),
+            costShipping: document.getElementById('cost-shipping'),
+            costLabor: document.getElementById('cost-labor'),
+            costMaterials: document.getElementById('cost-materials'),
+            costPaymentFee: document.getElementById('cost-payment-fee'),
+            fixedAds: document.getElementById('fixed-ads'),
+            fixedServer: document.getElementById('fixed-server')
+        };
+
+        const outputs = {
+            revenue: document.getElementById('res-revenue'),
+            variable: document.getElementById('res-variable'),
+            fixed: document.getElementById('res-fixed'),
+            profit: document.getElementById('res-profit'),
+            margin: document.getElementById('res-margin'),
+            yearlyProfit: document.getElementById('res-yearly-profit'),
+            breakeven: document.getElementById('res-breakeven'),
+            profitBox: document.getElementById('profit-box'),
+            profitBar: document.getElementById('profit-margin-bar')
+        };
+
+        // スライダーと数値入力の同期
+        inputs.usersSlider.addEventListener('input', (e) => {
+            inputs.users.value = e.target.value;
+            calculate();
+        });
+        inputs.users.addEventListener('input', (e) => {
+            inputs.usersSlider.value = e.target.value;
+            calculate();
+        });
+
+        // 全入力要素にイベントリスナーを追加
+        Object.values(inputs).forEach(input => {
+            if(input !== inputs.usersSlider && input !== inputs.users) {
+                input.addEventListener('input', calculate);
+            }
+        });
+
+        // 数値フォーマット関数
+        const formatCurrency = (num) => {
+            return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY', maximumFractionDigits: 0 }).format(num);
+        };
+
+        function calculate() {
+            // 値の取得
+            const price = parseFloat(inputs.price.value) || 0;
+            const users = parseFloat(inputs.users.value) || 0;
+            
+            // 1セットあたりの原価
+            const costPerSet = (parseFloat(inputs.costGoods.value) || 0) + 
+                               (parseFloat(inputs.costShipping.value) || 0) + 
+                               (parseFloat(inputs.costLabor.value) || 0) + 
+                               (parseFloat(inputs.costMaterials.value) || 0);
+            
+            // 月次にならした1人あたりの原価 (隔月送付なので2で割る)
+            const monthlyCostPerUser = costPerSet / 2;
+
+            const paymentFeeRate = (parseFloat(inputs.costPaymentFee.value) || 0) / 100;
+            
+            const fixedCosts = (parseFloat(inputs.fixedAds.value) || 0) + 
+                               (parseFloat(inputs.fixedServer.value) || 0);
+
+            // 計算
+            const monthlyRevenue = price * users;
+            const monthlyPaymentFee = monthlyRevenue * paymentFeeRate;
+            const monthlyVariableCosts = (monthlyCostPerUser * users) + monthlyPaymentFee;
+            
+            const monthlyProfit = monthlyRevenue - monthlyVariableCosts - fixedCosts;
+            const profitMargin = monthlyRevenue > 0 ? (monthlyProfit / monthlyRevenue) * 100 : 0;
+            
+            const yearlyProfit = monthlyProfit * 12;
+
+            // 損益分岐点(人)の計算
+            // 利益 = 売上 - 変動費 - 固定費 = 0
+            // (Price * Users) - ((CostPerUser * Users) + (Price * Users * FeeRate)) - Fixed = 0
+            // Users * (Price - CostPerUser - Price * FeeRate) = Fixed
+            const grossMarginPerUser = price - monthlyCostPerUser - (price * paymentFeeRate);
+            let breakeven = 0;
+            if (grossMarginPerUser > 0) {
+                breakeven = Math.ceil(fixedCosts / grossMarginPerUser);
+            } else {
+                breakeven = "達成不可"; // 1人あたりの限界利益がマイナスの場合
+            }
+
+            // UIの更新
+            outputs.revenue.innerText = formatCurrency(monthlyRevenue);
+            outputs.variable.innerText = formatCurrency(monthlyVariableCosts);
+            outputs.fixed.innerText = formatCurrency(fixedCosts);
+            
+            outputs.profit.innerText = formatCurrency(monthlyProfit);
+            outputs.yearlyProfit.innerText = formatCurrency(yearlyProfit);
+            outputs.breakeven.innerText = isNaN(breakeven) ? breakeven : new Intl.NumberFormat('ja-JP').format(breakeven);
+
+            // 利益率とプログレスバーの更新
+            outputs.margin.innerText = profitMargin.toFixed(1) + '%';
+            
+            if (monthlyProfit >= 0) {
+                outputs.profitBox.className = "mt-6 p-6 rounded-xl border-2 shadow-sm transition-colors duration-300 border-green-200 bg-white";
+                outputs.profit.className = "text-4xl font-extrabold text-green-600";
+                outputs.profitBar.style.width = Math.min(profitMargin, 100) + '%';
+                outputs.profitBar.className = "h-2.5 rounded-full bg-green-500";
+            } else {
+                outputs.profitBox.className = "mt-6 p-6 rounded-xl border-2 shadow-sm transition-colors duration-300 border-red-200 bg-red-50";
+                outputs.profit.className = "text-4xl font-extrabold text-red-600";
+                outputs.profitBar.style.width = '100%';
+                outputs.profitBar.className = "h-2.5 rounded-full bg-red-500 opacity-50"; // 赤字の場合はバーを赤くする
+            }
+        }
+
+        // 初期計算の実行
+        calculate();
+    </script>
+</body>
+</html>
