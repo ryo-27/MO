@@ -1753,18 +1753,6 @@
   border: 1px solid var(--border);
 }
 
-.plan-card-outdoor {
-  order: 3;
-}
-
-.plan-card-featured {
-  order: 2;
-}
-
-.plan-card-indoor {
-  order: 1;
-}
-
 .plan-card-header {
   min-height: 168px;
 }
